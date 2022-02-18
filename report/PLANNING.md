@@ -31,7 +31,7 @@ All throughout this period I will be writing my report.
   - [ ] COULD - Ablation study
     - [ ] COULD - Figure out how to do an ablation study
     - [ ] COULD - Execute ablation study
-  - [ ] SHOULD - First revision of the paper for grading
+  - [ ] SHOULD - Second revision of the paper for grading
   - [ ] COULD - Produce dockerfile for reproducibility
 ## Week 6 (21/03 - 27/03):
   - [ ] MUST - Last revision of the paper
