@@ -8,9 +8,9 @@ All throughout this period I will be writing my report.
 ## Week 2 (21/02 - 25/02):
   - [ ] SHOULD - Retrieve ImageNet dataset
   - [ ] SHOULD - Select subset of 60K images to train on 
-  - [ ] MUST - Setup up project structure
-    - [ ] MUST - Directories
-    - [ ] MUST - Setup.cfg
+  - [x] MUST - Setup up project structure
+    - [x] MUST - Directories
+    - [x] MUST - Setup.cfg
   - [ ] MUST Inception-ResNet-v2
     - [ ] SHOULD - Find and install/download Inception-ResNet-v2 in PyTorch (possibly/preferably pretrained)
     - [ ] SHOULD - Replicate Inception-ResNet-v2 in PyTorch myself
