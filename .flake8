@@ -1,0 +1,6 @@
+[flake8]
+ignore = ANN101
+count = True
+statistics = True
+docstring-convention = google
+max-line-length = 99
