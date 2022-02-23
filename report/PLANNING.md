@@ -6,7 +6,7 @@ All throughout this period I will be writing my report.
  - [x] MUST - Make planning
  - [x] MUST - Install PyTorch locally
 ## Week 2 (21/02 - 25/02):
-  - [ ] SHOULD - Retrieve ImageNet dataset
+  - [x] SHOULD - Retrieve ImageNet dataset
   - [ ] SHOULD - Select subset of 60K images to train on 
   - [x] MUST - Setup up project structure
     - [x] MUST - Directories
