@@ -7,7 +7,8 @@ All throughout this period I will be writing my report.
  - [x] MUST - Install PyTorch locally
 ## Week 2 (21/02 - 25/02):
   - [x] SHOULD - Retrieve ImageNet dataset
-  - [ ] SHOULD - Select subset of 60K images to train on 
+  - [ ] SHOULD - Select subset of 10K images to train on (reduced from original 60K) 
+  - [ ] COULD - Check for imbalanced dataset in subset
   - [x] MUST - Setup up project structure
     - [x] MUST - Directories
     - [x] MUST - Setup.cfg
