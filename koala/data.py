@@ -1,12 +1,13 @@
 from pathlib import Path
 
 from matplotlib import pyplot as plt
+from torch import float as tfloat
 from torch.functional import Tensor
 from torch.utils.data import Dataset
 
 try:
     # There's a breaking change in the newest version of PILL that torchvision relies on
-    from torchvision.transforms import Compose, Grayscale, Resize
+    from torchvision.transforms import Compose, ConvertImageDtype, Grayscale, Resize
 except ImportError as ie:
 
     if "cannot import name 'PILLOW_VERSION'" in ie.msg:
@@ -14,7 +15,7 @@ except ImportError as ie:
 
         PIL.PILLOW_VERSION = PIL.__version__
 
-        from torchvision.transforms import Compose, Grayscale, Resize
+        from torchvision.transforms import Compose, ConvertImageDtype, Grayscale, Resize
     else:
         raise ie
 
@@ -75,7 +76,7 @@ class KoalaDataset(Dataset):
         self.img_names = img_names
         self.img_dir = img_dir
         self.ext_format = ext_format
-        self.transforms = Compose([SquarePad(), Resize(img_size)])
+        self.transforms = Compose([SquarePad(), Resize(img_size), ConvertImageDtype(tfloat)])
         self.grayscale = Grayscale(3)
 
     def __len__(self) -> int:
