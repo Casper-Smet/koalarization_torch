@@ -18,7 +18,7 @@ except ImportError as ie:
     else:
         raise ie
 
-from torchvision.io import read_image
+from torchvision.io import ImageReadMode, read_image
 from torchvision.transforms.functional import pad
 
 DEFAULT_DATA = Path("./data")
@@ -96,7 +96,7 @@ class KoalaDataset(Dataset):
         img_path = self.img_dir / self.ext_format.format(self.img_names[idx])
         if not img_path.exists():
             raise FileNotFoundError(f"Input image at {img_path} does not exist.")
-        img_y = self.transforms(read_image(img_path.as_posix()))
+        img_y = self.transforms(read_image(img_path.as_posix(), ImageReadMode.RGB))
         img_x = self.grayscale(img_y)
 
         return img_x, img_y
