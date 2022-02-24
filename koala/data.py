@@ -94,7 +94,6 @@ class KoalaDataset(Dataset):
             tuple[Tensor, Tensor]: grayscaled image, original (padded)
         """
         img_path = self.img_dir / self.ext_format.format(self.img_names[idx])
-        print(img_path)
         if not img_path.exists():
             raise FileNotFoundError(f"Input image at {img_path} does not exist.")
         img_y = self.transforms(read_image(img_path.as_posix()))
