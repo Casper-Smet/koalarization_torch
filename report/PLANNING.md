@@ -12,8 +12,8 @@ All throughout this period I will be writing my report.
   - [x] MUST - Setup up project structure
     - [x] MUST - Directories
     - [x] MUST - Setup.cfg
-  - [ ] MUST Inception-ResNet-v2
-    - [ ] SHOULD - Find and install/download Inception-ResNet-v2 in PyTorch (possibly/preferably pretrained)
+  - [x] MUST Inception-ResNet-v2
+    - [x] SHOULD - Find and install/download Inception-ResNet-v2 in PyTorch (possibly/preferably pretrained)
     - [ ] SHOULD - Replicate Inception-ResNet-v2 in PyTorch myself
 ## Week 3 (28/02 - 04/03):
   - [ ] MUST - Make encoder structure
