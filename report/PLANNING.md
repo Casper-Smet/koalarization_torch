@@ -7,15 +7,14 @@ All throughout this period I will be writing my report.
  - [x] MUST - Install PyTorch locally
 ## Week 2 (21/02 - 25/02):
   - [x] SHOULD - Retrieve ImageNet dataset
-  - [x] SHOULD - Select subset of 10K images to train on (reduced from original 60K) 
-  - [ ] COULD - Check for imbalanced dataset in subset
+  - [x] SHOULD - Select subset of 10K images to train on (reduced from original 60K)
   - [x] MUST - Setup up project structure
     - [x] MUST - Directories
     - [x] MUST - Setup.cfg
   - [x] MUST Inception-ResNet-v2
     - [x] SHOULD - Find and install/download Inception-ResNet-v2 in PyTorch (possibly/preferably pretrained)
-    - [ ] SHOULD - Replicate Inception-ResNet-v2 in PyTorch myself
 ## Week 3 (28/02 - 04/03):
+  - [ ] MUST - Eye-test Inception-ResNet-v2's performace
   - [ ] MUST - Make encoder structure
   - [ ] MUST - Fusion layer
   - [ ] MUST - Decoder
