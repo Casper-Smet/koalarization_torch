@@ -3,7 +3,7 @@ Deep Koalarization in PyTorch
 
 
 ## Installing
-In order to install Koala we supply a setup.cfg/pyproject.toml. The current dependencies are based off of pytorch Python 3.9.
+In order to install Koala we supply a setup.cfg/pyproject.toml. The current Koalafications (dependencies) are based off of pytorch Python 3.9.
 
 ```bash
 git clone git@github.com:Casper-Smet/koalarization_torch.git
