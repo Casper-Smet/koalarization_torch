@@ -14,7 +14,7 @@ All throughout this period I will be writing my report.
   - [x] MUST Inception-ResNet-v2
     - [x] SHOULD - Find and install/download Inception-ResNet-v2 in PyTorch (possibly/preferably pretrained)
 ## Week 3 (28/02 - 04/03):
-  - [ ] MUST - Eye-test Inception-ResNet-v2's performace
+  - [x] MUST - Eye-test Inception-ResNet-v2's performace
   - [ ] MUST - Make encoder structure
   - [ ] MUST - Fusion layer
   - [ ] MUST - Decoder
