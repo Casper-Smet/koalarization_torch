@@ -24,11 +24,17 @@ class Encoder(nn.Module):
     def __init__(self) -> None:
         super().__init__()
         self.act = nn.ReLU()
-        self.conv1 = nn.Conv2d(1, 64, kernel_size=3, padding="same", stride=2)
+        self.conv1 = nn.Conv2d(
+            1, 64, kernel_size=3, padding="same", stride=2
+        )  # FIXME: padding='same' is not supported for strided convolutions, implement custom padding
         self.conv2 = nn.Conv2d(1, 128, kernel_size=3, padding="same")
-        self.conv3 = nn.Conv2d(1, 128, kernel_size=3, padding="same", stride=2)
+        self.conv3 = nn.Conv2d(
+            1, 128, kernel_size=3, padding="same", stride=2
+        )  # FIXME: padding='same' is not supported for strided convolutions, implement custom padding
         self.conv4 = nn.Conv2d(1, 256, kernel_size=3, padding="same")
-        self.conv5 = nn.Conv2d(1, 256, kernel_size=3, padding="same", stride=2)
+        self.conv5 = nn.Conv2d(
+            1, 256, kernel_size=3, padding="same", stride=2
+        )  # FIXME: padding='same' is not supported for strided convolutions, implement custom padding
         self.conv6 = nn.Conv2d(1, 512, kernel_size=3, padding="same")
         self.conv7 = nn.Conv2d(1, 512, kernel_size=3, padding="same")
         self.conv8 = nn.Conv2d(1, 256, kernel_size=3, padding="same")
