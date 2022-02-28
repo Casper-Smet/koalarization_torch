@@ -154,7 +154,9 @@ def resnet_labels_to_tensor(
     return _, tensor(label_arr, dtype=tfloat)
 
 
-def load_resnet_labels(p: Path, skip_header: bool = True) -> dict[str, Tensor]:
+def load_resnet_labels(
+    p: Path, skip_header: bool = True, label_map: dict = None
+) -> dict[str, Tensor]:
     """Loads imagenet labels and converts them to Inception-Resnet labels.
 
     Args:
@@ -168,7 +170,13 @@ def load_resnet_labels(p: Path, skip_header: bool = True) -> dict[str, Tensor]:
     if skip_header:
         lines = lines[1:]
     id_label_pairs = map(str.split, lines, repeat(","))
-    id_tensor_pairs = map(resnet_labels_to_tensor, id_label_pairs)
+    if label_map is None:
+        id_tensor_pairs = map(resnet_labels_to_tensor, id_label_pairs)
+    else:
+        id_tensor_pairs = map(
+            resnet_labels_to_tensor, id_label_pairs, repeat(label_map)
+        )
+
     return dict(id_tensor_pairs)
 
 
@@ -192,6 +200,8 @@ def load_image_names(p: Path) -> list[str]:
 
 
 def main():
+    import matplotlib.pyplot as plt
+
     labels = load_resnet_labels(DEFAULT_RESNET_LABELS)
     label = labels["ILSVRC2012_val_00003605"]
     print(label)
