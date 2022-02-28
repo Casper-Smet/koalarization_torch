@@ -1,4 +1,4 @@
-"""Koalarization decpder architecture."""
+"""Koalarization decoder architecture."""
 
 import torch
 from torch import nn
@@ -8,7 +8,7 @@ class Decoder(nn.Module):
     """Decoder architecture for Koalarization.
 
     All layers use the ReLU activation function.
-
+    layer   Kernels         Stride
     conv    128 × (3 × 3)   1 × 1
     upsamp      -           -
     conv    64  × (3 × 3)   1 × 1
@@ -23,6 +23,14 @@ class Decoder(nn.Module):
 
     def __init__(self) -> None:
         super().__init__()
+        self.act = nn.ReLU()
+        self.conv1 = nn.Conv2d(1, 128, kernel_size=3, padding="same")
+        self.upsample = nn.UpsamplingNearest2d(size=2)
+        self.conv2 = nn.Conv2d(1, 64, kernel_size=3, padding="same")
+        self.conv3 = nn.Conv2d(1, 64, kernel_size=3, padding="same")
+        self.conv4 = nn.Conv2d(1, 32, kernel_size=3, padding="same")
+        self.conv5 = nn.Conv2d(1, 2, kernel_size=3, padding="same")
+        self.tanh = nn.Tanh()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass.
@@ -33,4 +41,12 @@ class Decoder(nn.Module):
         Returns:
             torch.Tensor: Output for Fusion layer
         """
+        x = self.act(self.conv1(x))
+        x = self.upsample(x)
+        x = self.act(self.conv2(x))
+        x = self.act(self.conv3(x))
+        x = self.upsample(x)
+        x = self.act(self.conv4(x))
+        x = self.act(self.conv5(x))
+        x = self.upsample()
         return x
