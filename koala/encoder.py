@@ -1,6 +1,13 @@
-"""Koalarization encoder architecture."""
+"""Koalarization encoder architecture.
+
+The encoder architecture uses "same" padding in combination with stride at some points.
+This isn't officially supported by PyTorch, ergo we're using timm's implementation.
+The timm implementation might not work exactly as Tensorflow's does.
+
+"""
 
 import torch
+from timm.models.layers.conv2d_same import Conv2dSame
 from torch import nn
 
 
@@ -24,17 +31,11 @@ class Encoder(nn.Module):
     def __init__(self) -> None:
         super().__init__()
         self.act = nn.ReLU()
-        self.conv1 = nn.Conv2d(
-            1, 64, kernel_size=3, padding="same", stride=2
-        )  # FIXME: padding='same' is not supported for strided convolutions, implement custom padding
+        self.conv1 = Conv2dSame(1, 64, kernel_size=3, stride=2)
         self.conv2 = nn.Conv2d(1, 128, kernel_size=3, padding="same")
-        self.conv3 = nn.Conv2d(
-            1, 128, kernel_size=3, padding="same", stride=2
-        )  # FIXME: padding='same' is not supported for strided convolutions, implement custom padding
+        self.conv3 = Conv2dSame(1, 128, kernel_size=3, stride=2)
         self.conv4 = nn.Conv2d(1, 256, kernel_size=3, padding="same")
-        self.conv5 = nn.Conv2d(
-            1, 256, kernel_size=3, padding="same", stride=2
-        )  # FIXME: padding='same' is not supported for strided convolutions, implement custom padding
+        self.conv5 = Conv2dSame(1, 256, kernel_size=3, stride=2)
         self.conv6 = nn.Conv2d(1, 512, kernel_size=3, padding="same")
         self.conv7 = nn.Conv2d(1, 512, kernel_size=3, padding="same")
         self.conv8 = nn.Conv2d(1, 256, kernel_size=3, padding="same")
