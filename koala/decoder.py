@@ -24,12 +24,12 @@ class Decoder(nn.Module):
     def __init__(self) -> None:
         super().__init__()
         self.act = nn.ReLU()
-        self.conv1 = nn.Conv2d(1, 128, kernel_size=3, padding="same")
+        self.conv1 = nn.Conv2d(256, 128, kernel_size=3, padding="same")
         self.upsample = nn.UpsamplingNearest2d(size=2)
-        self.conv2 = nn.Conv2d(1, 64, kernel_size=3, padding="same")
-        self.conv3 = nn.Conv2d(1, 64, kernel_size=3, padding="same")
-        self.conv4 = nn.Conv2d(1, 32, kernel_size=3, padding="same")
-        self.conv5 = nn.Conv2d(1, 2, kernel_size=3, padding="same")
+        self.conv2 = nn.Conv2d(128 * 2, 64, kernel_size=3, padding="same")
+        self.conv3 = nn.Conv2d(64, 64, kernel_size=3, padding="same")
+        self.conv4 = nn.Conv2d(64 * 2, 32, kernel_size=3, padding="same")
+        self.conv5 = nn.Conv2d(32, 2, kernel_size=3, padding="same")
         self.tanh = nn.Tanh()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
