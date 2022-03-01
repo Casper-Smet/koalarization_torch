@@ -3,5 +3,5 @@
 Deep image colorization in Pytorch.
 """
 
-from .network import test
-import data
+from .network import Colorization  # noqa: F401
+import data  # noqa: F401
