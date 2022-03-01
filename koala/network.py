@@ -18,14 +18,17 @@ from timm import create_model
 
 from .decoder import Decoder
 from .encoder import Encoder
+from .fusion import Fusion
 
 
 class Colorization(nn.Module):
     """Colorization architecture with Encoder, Feature extractor, and Decoder."""
+
     def __init__(self, feature_extractor: Any = None) -> None:
         super().__init__()
+        # Encoder branch
         self.encode = Encoder()
-        self.decode = Decoder()
+        # Feature extractor branch
         if feature_extractor is None:
             # lazy import for typing
             from timm.models.inception_resnet_v2 import InceptionResnetV2
@@ -35,6 +38,10 @@ class Colorization(nn.Module):
             )
         else:
             self.feat_extr = feature_extractor
+
+        # Fusion layer
+        self.fusion = Fusion()
+        self.decode = Decoder()
 
 
 def test() -> None:
