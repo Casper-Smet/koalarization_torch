@@ -8,8 +8,16 @@ from torch import nn
 class Fusion(nn.Module):
     def __init__(self) -> None:
         super().__init__()
-        self.conv = nn.Conv2d(1, 256, kernal_size=1)
+        self.conv = nn.Conv2d(1256, 256, kernal_size=1)
         self.act = nn.ReLU()
-    
+
     def forward(self, img: torch.Tensor, feat_vec: torch.Tensor):
-        ...
+        # Reshape feat_vec to (batch, 1000, 1, 1)
+        reshaped_feat_vec = torch.reshape(feat_vec, (*feat_vec.shape, 1, 1))
+        # Repeat the vector 28x28 times (H/8 x W/8), so that (batch, 1000, 28, 28)
+        repeated_feat_vec = reshaped_feat_vec.repeat(1, 1, 28, 28)
+        # Swap the last two axes so that vec[:, :, x, y] == feat_vec for any x, y
+        embs = torch.permute(repeated_feat_vec, (0, 1, 3, 2))
+        fused = torch.cat((img, embs))
+        x = self.act(self.conv(fused))
+        return x
