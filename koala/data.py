@@ -3,9 +3,7 @@ from itertools import repeat
 from pathlib import Path
 
 import numpy as np
-from torch import float as tfloat
-from torch import tensor
-from torch.functional import Tensor
+import torch
 from torch.utils.data import Dataset
 
 try:
@@ -44,7 +42,7 @@ class SquarePad:
     Adapted from https://discuss.pytorch.org/t/how-to-resize-and-pad-in-a-torchvision-transforms-compose/71850/4
     """
 
-    def __call__(self, image: Tensor) -> Tensor:
+    def __call__(self, image: torch.Tensor) -> torch.Tensor:
         """Pads the input image into a homogenous shape.
 
         Args:
@@ -86,14 +84,14 @@ class KoalaDataset(Dataset):
         self.img_dir = img_dir
         self.ext_format = ext_format
         self.transforms = Compose(
-            [SquarePad(), Resize(img_size), ConvertImageDtype(tfloat)]
+            [SquarePad(), Resize(img_size), ConvertImageDtype(torch.float)]
         )
         self.grayscale = Grayscale(3)
 
     def __len__(self) -> int:
         return len(self.img_names)
 
-    def get_img(self, idx: int) -> Tensor:
+    def get_img(self, idx: int) -> torch.Tensor:
         """Reads the image at index idx from file system into Tensor, transforms appropriately.
 
         Sub function for easier subclassing.
@@ -113,7 +111,7 @@ class KoalaDataset(Dataset):
         img = self.transforms(read_image(img_path.as_posix(), ImageReadMode.RGB))
         return img
 
-    def __getitem__(self, idx: int) -> tuple[Tensor, Tensor]:
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
         """Reads the image at index idx from file system into Tensor, transforms appropriately.
 
         Args:
@@ -133,7 +131,7 @@ class KoalaDataset(Dataset):
 
 def resnet_labels_to_tensor(
     id_label_pair: tuple[str, str], label_map: dict = None, num_classes: int = 1000
-) -> tuple[any, Tensor]:
+) -> tuple[any, torch.Tensor]:
     """Turns a id-labels pair into a id-tensor pair
 
     Args:
@@ -151,12 +149,12 @@ def resnet_labels_to_tensor(
 
     label_arr = np.zeros(num_classes)
     label_arr[[label_map[k] for k in pairs]] = 1
-    return _, tensor(label_arr, dtype=tfloat)
+    return _, torch.tensor(label_arr, dtype=torch.float)
 
 
 def load_resnet_labels(
     p: Path, skip_header: bool = True, label_map: dict = None
-) -> dict[str, Tensor]:
+) -> dict[str, torch.Tensor]:
     """Loads imagenet labels and converts them to Inception-Resnet labels.
 
     Args:
