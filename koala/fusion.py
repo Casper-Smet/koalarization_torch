@@ -16,7 +16,7 @@ class Fusion(nn.Module):
     """
     def __init__(self) -> None:
         super().__init__()
-        self.conv = nn.Conv2d(1256, 256, kernal_size=1)
+        self.conv = nn.Conv2d(1256, 256, kernel_size=1)
         self.act = nn.ReLU()
 
     def forward(self, img: torch.Tensor, feat_vec: torch.Tensor) -> torch.Tensor:
@@ -37,6 +37,6 @@ class Fusion(nn.Module):
         repeated_feat_vec = reshaped_feat_vec.repeat(1, 1, 28, 28)
         # Swap the last two axes so that vec[:, :, x, y] == feat_vec for any x, y
         embs = torch.permute(repeated_feat_vec, (0, 1, 3, 2))
-        fused = torch.cat((img, embs))
+        fused = torch.cat((img, embs), 1)
         x = self.act(self.conv(fused))
         return x
