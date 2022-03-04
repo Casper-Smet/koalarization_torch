@@ -4,6 +4,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+from torch import nn
 from torch.utils.data import Dataset
 
 try:
@@ -19,6 +20,7 @@ except ImportError as ie:
         from torchvision.transforms import Compose, ConvertImageDtype, Grayscale, Resize
     else:
         raise ie
+
 
 from torchvision.io import ImageReadMode, read_image
 from torchvision.transforms.functional import pad
@@ -37,12 +39,12 @@ DEFAULT_SYSNET_MAPPING = DEFAULT_DATA / Path(
 )
 
 
-class SquarePad:
+class SquarePad(nn.Module):
     """Pads the input image into a homogenous shape.
     Adapted from https://discuss.pytorch.org/t/how-to-resize-and-pad-in-a-torchvision-transforms-compose/71850/4
     """
 
-    def __call__(self, image: torch.Tensor) -> torch.Tensor:
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
         """Pads the input image into a homogenous shape.
 
         Args:
@@ -57,6 +59,11 @@ class SquarePad:
         vp = (max_wh - h) // 2
         padding = (hp, vp, hp, vp)
         return pad(image, padding, 0, "constant")
+
+
+class Normalize(nn.Module):
+    def forward(self, img: torch.Tensor) -> torch.Tensor:
+        return (img * 2) - 1
 
 
 class KoalaDataset(Dataset):
