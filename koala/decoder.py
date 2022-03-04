@@ -25,10 +25,10 @@ class Decoder(nn.Module):
         super().__init__()
         self.act = nn.ReLU()
         self.conv1 = nn.Conv2d(256, 128, kernel_size=3, padding="same")
-        self.upsample = nn.UpsamplingNearest2d(size=2)
-        self.conv2 = nn.Conv2d(128 * 2, 64, kernel_size=3, padding="same")
+        self.upsample = nn.Upsample(scale_factor=2, mode="nearest")
+        self.conv2 = nn.Conv2d(128, 64, kernel_size=3, padding="same")
         self.conv3 = nn.Conv2d(64, 64, kernel_size=3, padding="same")
-        self.conv4 = nn.Conv2d(64 * 2, 32, kernel_size=3, padding="same")
+        self.conv4 = nn.Conv2d(64, 32, kernel_size=3, padding="same")
         self.conv5 = nn.Conv2d(32, 2, kernel_size=3, padding="same")
         self.tanh = nn.Tanh()
 
@@ -47,6 +47,6 @@ class Decoder(nn.Module):
         x = self.act(self.conv3(x))
         x = self.upsample(x)
         x = self.act(self.conv4(x))
-        x = self.act(self.conv5(x))
-        x = self.upsample()
+        x = self.tanh(self.conv5(x))
+        x = self.upsample(x)
         return x
