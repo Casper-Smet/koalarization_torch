@@ -1,8 +1,5 @@
-from functools import cache
-from itertools import repeat
 from pathlib import Path
 
-import numpy as np
 import torch
 from torch import nn
 from torch.utils.data import Dataset
@@ -25,6 +22,9 @@ except ImportError as ie:
 from torchvision.io import ImageReadMode, read_image
 from torchvision.transforms.functional import pad
 
+from pytorch_colors import rgb_to_lab, _generic_transform_sk_4d, lab2rgb
+
+lab_to_rgb = _generic_transform_sk_4d(lab2rgb)
 DEFAULT_DATA = Path("./data")
 DEFAULT_TRAIN = DEFAULT_DATA / Path("val_img.txt")
 DEFAULT_VAL = DEFAULT_DATA / Path("train_img.txt")
@@ -55,11 +55,6 @@ class SquarePad(nn.Module):
         return pad(image, padding, 0, "constant")
 
 
-class Normalize(nn.Module):
-    def forward(self, img: torch.Tensor) -> torch.Tensor:
-        return (img * 2) - 1
-
-
 class KoalaDataset(Dataset):
     """Default Dataset for this torch Koalarization.
 
@@ -71,7 +66,7 @@ class KoalaDataset(Dataset):
         img_names: list[str],
         img_dir: Path,
         ext_format: str,
-        img_size: tuple[int, int] = (299, 299),
+        img_size: tuple[int, int] = (224, 224),
     ):
         """Default KoalaDataset.
 
@@ -122,10 +117,11 @@ class KoalaDataset(Dataset):
             FileNotFoundError: if file at path does not exist, raise before trying to read with torch.
 
         Returns:
-            tuple[Tensor, Tensor]: grayscaled image, original (padded)
+            tuple[Tensor, Tensor]: grayscaled image (L*), original (padded) (A*B*)
         """
         img_y = self.get_img(idx)
-        img_x = self.grayscale(img_y)
+        img_x = rgb_to_lab(self.grayscale(img_y))[[0]] / 50 - 1
+        img_y = rgb_to_lab(img_y)[1:] / 127
 
         return img_x, img_y
 
