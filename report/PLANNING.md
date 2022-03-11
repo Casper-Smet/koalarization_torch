@@ -15,9 +15,9 @@ All throughout this period I will be writing my report.
     - [x] SHOULD - Find and install/download Inception-ResNet-v2 in PyTorch (possibly/preferably pretrained)
 ## Week 3 (28/02 - 04/03):
   - [x] MUST - Eye-test Inception-ResNet-v2's performace
-  - [ ] MUST - Make encoder structure
-  - [ ] MUST - Fusion layer
-  - [ ] MUST - Decoder
+  - [x] MUST - Make encoder structure
+  - [x] MUST - Fusion layer
+  - [x] MUST - Decoder
   - [ ] MUST - Train (will take some time):
     - [ ] SHOULD - 90% of dataset for training
     - [ ] COULD - Batch size of 100 images
