@@ -110,7 +110,7 @@ def main(
 ):
     writer = SummaryWriter(r"./scratch/log/koala")
 
-    dataset = KoalaDataset(load_image_names(train_filenames), img_dir, file_format)
+    dataset = KoalaDataset(load_image_names(train_filenames)[:-1], img_dir, file_format)
     dataloader = DataLoader(
         dataset,
         batch_size=batch_size,
