@@ -26,8 +26,8 @@ from pytorch_colors import rgb_to_lab, _generic_transform_sk_4d, lab2rgb
 
 lab_to_rgb = _generic_transform_sk_4d(lab2rgb)
 DEFAULT_DATA = Path("./data")
-DEFAULT_TRAIN = DEFAULT_DATA / Path("val_img.txt")
-DEFAULT_VAL = DEFAULT_DATA / Path("train_img.txt")
+DEFAULT_TRAIN = DEFAULT_DATA / Path("train_img.txt")
+DEFAULT_VAL = DEFAULT_DATA / Path("val_img.txt")
 DEFAULT_IMG_DIR = DEFAULT_DATA / Path(
     "./imagenet-object-localization-challenge/imagenet_object_localization_patched2019.tar/imagenet_object_localization_patched2019/ILSVRC/Data/CLS-LOC/val/"
 )
