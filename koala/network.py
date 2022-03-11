@@ -41,7 +41,7 @@ class Colorization(nn.Module):
     def __init__(self, feature_extractor: Any = None) -> None:
         super().__init__()
         # Data preprocessing for the encoder
-        self.resize = Resize((224, 224))
+        self.resize = Resize((299, 299))
         # Encoder branch
         self.encode = Encoder()
         # Feature extractor branch
@@ -61,12 +61,12 @@ class Colorization(nn.Module):
         self.decode = Decoder()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Select the L three times, and resize to 299x299
+        pre_feat_exr = self.resize(x[:, [0, 0, 0]])
         # Extract high level features from image
-        feat_vec: torch.Tensor = self.feat_extr(x)
-        # Take one colour channel, and resize
-        single_channel_enc: torch.Tensor = self.resize(x[:, [0]])
+        feat_vec: torch.Tensor = self.feat_extr(pre_feat_exr)
         # Extract mid level features from image
-        encoded_img: torch.Tensor = self.encode(single_channel_enc)
+        encoded_img: torch.Tensor = self.encode(x)
         # Fuze high and mid level features
         x = self.fusion(encoded_img, feat_vec)
         # Decode fuzed features
