@@ -133,3 +133,5 @@ dmypy.json
 
 scratch/
 data/
+log/koala/
+models/
