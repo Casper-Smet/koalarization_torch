@@ -1,4 +1,5 @@
 import argparse
+from datetime import datetime
 from pathlib import Path
 
 import torch
@@ -12,6 +13,7 @@ from tqdm import tqdm, trange
 from .data import (
     DEFAULT_IMG_DIR,
     DEFAULT_TRAIN,
+    DEFAULT_VAL,
     KoalaDataset,
     lab_to_rgb,
     load_image_names,
@@ -66,6 +68,12 @@ def parse_args() -> argparse.ArgumentParser:
         help="Path to image names used in training.",
     )
     parser.add_argument(
+        "--val_filenames",
+        type=Path,
+        default=DEFAULT_VAL,
+        help="Path to image names used in validation.",
+    )
+    parser.add_argument(
         "--file_format",
         type=str,
         default=DEFAULT_FORMAT,
@@ -100,6 +108,7 @@ def parse_args() -> argparse.ArgumentParser:
 def main(
     img_dir: Path,
     train_filenames: Path,
+    val_filenames: Path,
     file_format: str,
     epochs: int,
     learning_rate: float,
@@ -108,17 +117,31 @@ def main(
     drop_last: bool,
     device: str,
 ):
-    writer = SummaryWriter(r"./scratch/log/koala")
-
-    dataset = KoalaDataset(load_image_names(train_filenames)[:-1], img_dir, file_format)
-    dataloader = DataLoader(
-        dataset,
+    now_str = str(datetime.now())
+    writer = SummaryWriter(rf"./log/koala/{now_str}")
+    train_dataset = KoalaDataset(
+        load_image_names(train_filenames)[:-1], img_dir, file_format
+    )
+    val_dataset = KoalaDataset(
+        load_image_names(val_filenames)[:-1], img_dir, file_format
+    )
+    train_dataloader = DataLoader(
+        train_dataset,
         batch_size=batch_size,
         num_workers=num_workers,
         pin_memory=PIN_MEMORY,
         drop_last=drop_last,
         persistent_workers=PERSISTENT_WORKERS,
         shuffle=SHUFFLE,
+    )
+    val_dataloader = DataLoader(
+        val_dataset,
+        batch_size=batch_size,
+        num_workers=num_workers,
+        pin_memory=PIN_MEMORY,
+        drop_last=drop_last,
+        persistent_workers=PERSISTENT_WORKERS,
+        shuffle=False,
     )
 
     model = Colorization()
@@ -133,16 +156,16 @@ def main(
     total_batches = 0
     for epoch in trange(epochs, unit="Epoch"):
         for batch_num, (inputs, targets) in tqdm(
-            enumerate(dataloader),
+            enumerate(train_dataloader),
             desc=f"Epoch {epoch}",
             unit="Batch",
-            total=len(dataset) // BATCH_SIZE,
+            total=len(train_dataset) // batch_size,
             leave=False,
         ):
             inputs, targets = inputs.to(device), targets.to(device)
+            optimizer.zero_grad()
             predicted = model(inputs)
             loss = criterion(predicted, targets)
-            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
@@ -151,7 +174,7 @@ def main(
                 writer.add_scalar("train/loss", running_loss, total_batches + batch_num)
                 running_loss = 0.0
                 writer.add_figure(
-                    "predictions vs. actuals",
+                    "train/prediction vs. true",
                     plot(
                         inputs[0].detach().cpu(),
                         predicted[0].detach().cpu(),
@@ -160,7 +183,47 @@ def main(
                     global_step=total_batches + batch_num,
                 )
 
-        total_batches += batch_num
+        total_batches += batch_num + 1
+        # Validate
+        if (epoch % 3) == 2:
+            for batch_num, (inputs, targets) in tqdm(
+                enumerate(val_dataloader),
+                desc=f"Val Epoch {epoch}",
+                unit="Batch",
+                total=len(val_dataset) // batch_size,
+                leave=False,
+            ):
+                inputs, targets = inputs.to(device), targets.to(device)
+                optimizer.zero_grad()
+                predicted = model(inputs)
+                loss = criterion(predicted, targets)
+                loss.backward()
+                optimizer.step()
+
+                running_loss += loss.item()
+
+            writer.add_scalar("val/loss", running_loss, epoch)
+            running_loss = 0.0
+            writer.add_figure(
+                "val/prediction vs. true",
+                plot(
+                    inputs[2].detach().cpu(),
+                    predicted[2].detach().cpu(),
+                    targets[2].detach().cpu(),
+                ),
+                global_step=epoch,
+            )
+
+    torch.save(
+        {
+            "epoch": epoch,
+            "model_state_dict": model.state_dict(),
+            "optimizer_state_dict": optimizer.state_dict(),
+            "loss": loss,
+        },
+        f"./models/{now_str}-koala_model.pt",
+    )
+    writer.flush()
 
 
 if __name__ == "__main__":
