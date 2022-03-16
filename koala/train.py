@@ -4,6 +4,7 @@ from pathlib import Path
 
 import torch
 from matplotlib import pyplot as plt
+from matplotlib.figure import Figure
 from torch import nn, optim
 from torch.cuda import get_device_properties
 from torch.utils.data import DataLoader
@@ -32,15 +33,34 @@ PERSISTENT_WORKERS = True
 DEVICE = "cuda"
 
 
-def norm(l, ab):
-    lab = torch.cat(((l + 1) * 50, ab * 127))
+def norm(l_star: torch.Tensor, ab: torch.Tensor) -> torch.Tensor:
+    """Normalises the L*A*B* format using in Colorization to RGB.
+
+    Args:
+        l_star (torch.Tensor): Luminescence channel
+        ab (torch.Tensor): A*B* channel
+
+    Returns:
+        torch.Tensor: RGB image
+    """
+    lab = torch.cat(((l_star + 1) * 50, ab * 127))
     rgb = lab_to_rgb(lab)
     return rgb
 
 
-def plot(l, pab, tab):
-    pred = norm(l, pab).permute(1, 2, 0)
-    true = norm(l, tab).permute(1, 2, 0)
+def plot(l_star: torch.Tensor, pab: torch.Tensor, tab: torch.Tensor) -> Figure:
+    """Plots L*A*B* images to Figure for tensorboard.
+
+    Args:
+        l_star (torch.Tensor): Luminescence channel
+        pab (torch.Tensor): Predicted A*B*
+        tab (torch.Tensor): True A*B*
+
+    Returns:
+        Figure: Matplotlib figure with two images
+    """
+    pred = norm(l_star, pab).permute(1, 2, 0)
+    true = norm(l_star, tab).permute(1, 2, 0)
     fig, (ax1, ax2) = plt.subplots(1, 2)
     ax1.imshow(pred)
     ax1.set_title("Predicted")
@@ -51,6 +71,11 @@ def plot(l, pab, tab):
 
 
 def parse_args() -> argparse.ArgumentParser:
+    """Arg parser for training.
+
+    Returns:
+        argparse.ArgumentParser: Arg parser
+    """
     parser = argparse.ArgumentParser(
         description="Trains a PyTorch Koalarization network."
     )
@@ -117,6 +142,20 @@ def main(
     drop_last: bool,
     device: str,
 ):
+    """Main function for training network
+
+    Args:
+        img_dir (Path): Path to images
+        train_filenames (Path): Path to text file with image names
+        val_filenames (Path): Path to text file with image names
+        file_format (str): File format
+        epochs (int): Number of epochs in training
+        learning_rate (float): Learning rate
+        batch_size (int): Number of images per batch
+        num_workers (int): Number of CPU workers for data collection
+        drop_last (bool): Ensure len(filenames) / batch size is whole number
+        device (str): CPU or GPU, device to be trained on
+    """
     # Prefix for file paths
     now_str = str(datetime.now())
     # Tensorboard
