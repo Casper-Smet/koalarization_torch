@@ -117,14 +117,20 @@ def main(
     drop_last: bool,
     device: str,
 ):
+    # Prefix for file paths
     now_str = str(datetime.now())
+    # Tensorboard
     writer = SummaryWriter(rf"./log/koala/{now_str}")
+
+    # Load datasets
     train_dataset = KoalaDataset(
         load_image_names(train_filenames)[:-1], img_dir, file_format
     )
     val_dataset = KoalaDataset(
         load_image_names(val_filenames)[:-1], img_dir, file_format
     )
+
+    # Create dataloaders
     train_dataloader = DataLoader(
         train_dataset,
         batch_size=batch_size,
@@ -144,17 +150,22 @@ def main(
         shuffle=False,
     )
 
+    # Initialise Neural network and send to GPU/CPU
     model = Colorization()
     model.to(device)
+
+    # Initialise Loss and optimiser
     criterion = nn.MSELoss()
     optimizer = optim.Adam(
         filter(lambda a: a.requires_grad, model.parameters()), lr=learning_rate
     )
 
-    running_loss = 0.0
-    print(f"Training on:\t {get_device_properties(device)}.")
+    running_loss = 0.0  # Keeps track of loss of Tensorboard
     total_batches = 0
+    print(f"Training on:\t {get_device_properties(device)}.")
+
     for epoch in trange(epochs, unit="Epoch"):
+        # Walk through data in batches
         for batch_num, (inputs, targets) in tqdm(
             enumerate(train_dataloader),
             desc=f"Epoch {epoch}",
@@ -164,12 +175,15 @@ def main(
         ):
             inputs, targets = inputs.to(device), targets.to(device)
             optimizer.zero_grad()
+            # Colourise images
             predicted = model(inputs)
+            # Calculate loss and back propagate
             loss = criterion(predicted, targets)
             loss.backward()
             optimizer.step()
 
             running_loss += loss.item()
+            # Write to tensorboard every 100 batches
             if (batch_num % 100) == 99:
                 writer.add_scalar("train/loss", running_loss, total_batches + batch_num)
                 running_loss = 0.0
@@ -186,6 +200,7 @@ def main(
         total_batches += batch_num + 1
         # Validate
         if (epoch % 3) == 2:
+            running_loss_val = 0.0
             for batch_num, (inputs, targets) in tqdm(
                 enumerate(val_dataloader),
                 desc=f"Val Epoch {epoch}",
@@ -197,19 +212,34 @@ def main(
                 optimizer.zero_grad()
                 predicted = model(inputs)
                 loss = criterion(predicted, targets)
-                loss.backward()
-                optimizer.step()
 
-                running_loss += loss.item()
+                running_loss_val += loss.item()
 
-            writer.add_scalar("val/loss", running_loss, epoch)
-            running_loss = 0.0
+            writer.add_scalar("val/loss", running_loss_val, epoch)
             writer.add_figure(
-                "val/prediction vs. true",
+                "val/prediction vs. true 1",
                 plot(
-                    inputs[2].detach().cpu(),
-                    predicted[2].detach().cpu(),
-                    targets[2].detach().cpu(),
+                    inputs[1].detach().cpu(),
+                    predicted[1].detach().cpu(),
+                    targets[1].detach().cpu(),
+                ),
+                global_step=epoch,
+            )
+            writer.add_figure(
+                "val/prediction vs. true 2",
+                plot(
+                    inputs[6].detach().cpu(),
+                    predicted[6].detach().cpu(),
+                    targets[6].detach().cpu(),
+                ),
+                global_step=epoch,
+            )
+            writer.add_figure(
+                "val/prediction vs. true 3",
+                plot(
+                    inputs[7].detach().cpu(),
+                    predicted[7].detach().cpu(),
+                    targets[7].detach().cpu(),
                 ),
                 global_step=epoch,
             )
