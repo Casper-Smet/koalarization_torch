@@ -19,13 +19,13 @@ All throughout this period I will be writing my report.
   - [x] MUST - Fusion layer
   - [x] MUST - Decoder
   - [ ] MUST - Train (will take some time):
-    - [ ] SHOULD - 90% of dataset for training
-    - [ ] COULD - Batch size of 100 images
+    - [x] SHOULD - 90% of dataset for training
+    - [x] COULD - Batch size of 20 images
     - [ ] COULD - If training takes too long / run out of VRAM, ask for access to HU compute cluster (maybe through Docker). Original paper uses NVidia Tesla K80, which has 24 GB of VRAM and 4992 CUDA cores vs my GTX 1070.
   - [ ] SHOULD - First revision of the paper for grading
 ## Week 4 (07/03 - 11/03):
   - [ ] MUST - Validation:
-    - [ ] SHOULD - 10% validation
+    - [x] SHOULD - 10% validation
     - [ ] COULD - Replicate user acceptance Study
 ## Week 5 (14/03 - 18/03):
   - [ ] COULD - Ablation study
