@@ -102,7 +102,7 @@ def parse_args() -> argparse.ArgumentParser:
         "--file_format",
         type=str,
         default=DEFAULT_FORMAT,
-        help='Format for images (e.g, "{}.jpeg".',
+        help='Format for images (e.g, "{}.jpeg").',
     )
     parser.add_argument("--epochs", type=int, default=EPOCHS, help="Amount of epochs.")
     parser.add_argument(
