@@ -238,7 +238,7 @@ def main(
 
         total_batches += batch_num + 1
         # Validate
-        if (epoch % 3) == 2:
+        if True:
             running_loss_val = 0.0
             for batch_num, (inputs, targets) in tqdm(
                 enumerate(val_dataloader),
