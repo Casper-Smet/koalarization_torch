@@ -23,7 +23,7 @@ pip install --no-dependencies .
 
 Follow the instructions in [./report/DATA.md](https://github.com/Casper-Smet/koalarization_torch/blob/main/report/DATA.md) to acquire your data, or substitute this with your own data (some commands might differ).
 
-The default arguments are based on the file path described in [./report/DATA.md](https://github.com/Casper-Smet/koalarization_torch/blob/main/report/DATA.md). You should be able to use these without alterations if you followed the instructions. See the paragraph [Scripts](## Scripts) for the commands and their optional arguments for extra information.
+The default arguments are based on the file path described in [./report/DATA.md](https://github.com/Casper-Smet/koalarization_torch/blob/main/report/DATA.md). You should be able to use these without alterations if you followed the instructions. See the paragraph [Scripts](##Scripts) for the commands and their optional arguments for extra information.
 
 ### With default parameters
 ```bash
