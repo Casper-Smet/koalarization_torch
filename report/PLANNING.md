@@ -26,7 +26,7 @@ All throughout this period I will be writing my report.
 ## Week 4 (07/03 - 11/03):
   - [ ] MUST - Validation:
     - [x] SHOULD - 10% validation
-    - [ ] COULD - Replicate user acceptance Study
+    - [x] COULD - Replicate user acceptance Study
 ## Week 5 (14/03 - 18/03):
   - [ ] COULD - Ablation study
     - [ ] COULD - Figure out how to do an ablation study
