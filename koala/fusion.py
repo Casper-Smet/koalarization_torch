@@ -9,7 +9,7 @@ class Fusion(nn.Module):
     """Fusion architecture for Koalarization.
 
     All layers use the ReLU activation function.
-    
+
     Layer   Kernels         Stride
     fusion  -               -
     conv    256 × (1 × 1)   1 × 1
