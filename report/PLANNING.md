@@ -18,7 +18,7 @@ All throughout this period I will be writing my report.
   - [x] MUST - Make encoder structure
   - [x] MUST - Fusion layer
   - [x] MUST - Decoder
-  - [ ] MUST - Train (will take some time):
+  - [x] MUST - Train (will take some time):
     - [x] SHOULD - 90% of dataset for training
     - [x] COULD - Batch size of 20 images
     - [ ] COULD - If training takes too long / run out of VRAM, ask for access to HU compute cluster (maybe through Docker). Original paper uses NVidia Tesla K80, which has 24 GB of VRAM and 4992 CUDA cores vs my GTX 1070.
