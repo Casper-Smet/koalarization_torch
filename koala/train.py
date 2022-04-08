@@ -34,7 +34,7 @@ DEVICE = "cuda"
 
 
 def norm(l_star: torch.Tensor, ab: torch.Tensor) -> torch.Tensor:
-    """Normalises the L*A*B* format using in Colorization to RGB.
+    """Normalises the L*A*B* format used in Colorization to RGB.
 
     Args:
         l_star (torch.Tensor): Luminescence channel
