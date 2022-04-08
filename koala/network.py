@@ -72,8 +72,3 @@ class Colorization(nn.Module):
         # Decode fuzed features
         x = self.decode(x)
         return x
-
-
-def test() -> None:
-    """Test function for setup tools."""
-    print("Test function")
