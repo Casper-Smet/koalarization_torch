@@ -34,4 +34,4 @@ All throughout this period I will be writing my report.
   - [ ] SHOULD - Second revision of the paper for grading
   - [ ] COULD - Produce dockerfile for reproducibility
 ## Week 6 (21/03 - 27/03):
-  - [ ] MUST - Last revision of the paper
+  - [x] MUST - Last revision of the paper
